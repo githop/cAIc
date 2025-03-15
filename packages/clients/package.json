@@ -5,8 +5,8 @@
   "types": "index.ts",
   "exports": {
     ".": "./index.ts",
-    "./caic": "./caic.ts",
-    "./weather-gov-client": "./weather-gov-client.ts",
-    "./caic-incidents": "./caic-incidents.ts"
+    "./caic": "./caic/index.ts",
+    "./weather-gov-client": "./weather-gov-client/index.ts",
+    "./caic-incidents": "./caic-incidents/index.ts"
   }
 }
