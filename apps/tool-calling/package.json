@@ -1,0 +1,15 @@
+{
+  "name": "tool-calling",
+  "type": "module",
+  "imports": {
+    "@ollama-ts/clients/caic": "../../packages/clients/caic",
+    "@ollama-ts/clients/weather-gov-client": "../../packages/clients/weather-gov-client",
+    "@ollama-ts/clients/caic-incidents": "../../packages/clients/caic-incidents"
+  },
+  "dependencies": {
+    "@ai-sdk/openai-compatible": "*",
+    "ai": "*",
+    "ollama": "*",
+    "zod": "*"
+  }
+}

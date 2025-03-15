@@ -64,7 +64,7 @@ export class WeatherGovClient {
       );
     }
 
-    return await response.json();
+    return await response.json() as GridPointsResponse;
   }
 
   async getForecast(
@@ -81,7 +81,7 @@ export class WeatherGovClient {
       );
     }
 
-    return await response.json();
+    return await response.json() as ForecastResponse;
   }
 
   async getHourlyForecast(
@@ -98,6 +98,6 @@ export class WeatherGovClient {
       );
     }
 
-    return await response.json();
+    return await response.json() as HourlyForecastResponse;
   }
 }

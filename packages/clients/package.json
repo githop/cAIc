@@ -1,0 +1,12 @@
+{
+  "name": "@ollama-ts/clients",
+  "type": "module",
+  "main": "index.ts",
+  "types": "index.ts",
+  "exports": {
+    ".": "./index.ts",
+    "./caic": "./caic.ts",
+    "./weather-gov-client": "./weather-gov-client.ts",
+    "./caic-incidents": "./caic-incidents.ts"
+  }
+}

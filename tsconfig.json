@@ -17,10 +17,19 @@
     "allowImportingTsExtensions": true,
     "rewriteRelativeImportExtensions": true,
     "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "noEmit": true,
     /* If your code doesn't run in the DOM: */
     "lib": [
       "es2022"
-    ]
-  }
+    ],
+    /* Paths for workspace aliases */
+    "baseUrl": ".",
+    "paths": {
+      "@ollama-ts/clients/caic": ["packages/clients/caic"],
+      "@ollama-ts/clients/weather-gov-client": ["packages/clients/weather-gov-client"],
+      "@ollama-ts/clients/caic-incidents": ["packages/clients/caic-incidents"]
+    }
+  },
+  "include": ["apps/**/*.ts", "packages/**/*.ts"]
 }

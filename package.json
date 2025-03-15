@@ -1,5 +1,9 @@
 {
   "type": "module",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "dependencies": {
     "@ai-sdk/openai-compatible": "^0.1.0",
     "ai": "^4.1.0",

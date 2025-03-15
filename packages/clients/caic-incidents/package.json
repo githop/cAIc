@@ -1,0 +1,6 @@
+{
+  "name": "@ollama-ts/clients/caic-incidents",
+  "type": "module",
+  "main": "index.ts",
+  "types": "index.ts"
+}
