@@ -8,7 +8,7 @@ import {
   recentAvalancheAccidentsTool,
 } from "./tools/index.ts";
 
-const OLLAMA_MODEL = "llama3.2:3b-instruct-fp16" as const;
+const OLLAMA_MODEL = "llama3.2:3b-instruct-fp16-num_ctx-32k" as const;
 const GEMINI_MODEL = "gemini-2.0-flash-001" as const;
 const API_KEY_GEMINI = process.env.API_KEY_GEMINI;
 

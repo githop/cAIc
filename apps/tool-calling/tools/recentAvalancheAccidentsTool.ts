@@ -6,13 +6,42 @@ import {
 } from "@ollama-ts/caic-incidents";
 import type { IncidentReport } from "@ollama-ts/caic-incidents";
 
-// Create instance of the AvalancheApiClient
-const avalancheApiClient = new AvalancheApiClient({ useMock: true });
+/**
+ * Type definition for the return value of mapReportData
+ */
+export interface FormattedAvalancheReport {
+  id: string;
+  type: string;
+  observedAt: string;
+  createdAt: string;
+  updatedAt: string;
+  location: string;
+  description: string;
+  zone: string;
+  reportDetail: {
+    weatherSummary: string;
+    snowpackSummary: string;
+    accidentSummary: string;
+    rescueSummary: string;
+    involvementSummary: string;
+    activity: string | null;
+    dangerRating: string;
+    leadUpEvents: string;
+    avalancheForecast: string;
+    comments: string;
+  } | null;
+  invovlementSummary: {
+    buried?: number;
+    injured?: number;
+    killed?: number;
+    caught?: number;
+  } | null;
+}
 
 /**
  * Maps API report to formatted report data
  */
-function mapReportData(report: IncidentReport) {
+function mapReportData(report: IncidentReport): FormattedAvalancheReport {
   return {
     id: report.id,
     type: report.type,
@@ -48,26 +77,94 @@ function mapReportData(report: IncidentReport) {
   };
 }
 
+/**
+ * Converts a FormattedAvalancheReport to a markdown string
+ */
+export function formatReportToMarkdown(
+  report: FormattedAvalancheReport,
+): string {
+  let markdown = `# Avalanche Report: ${report.location}\n\n`;
+
+  markdown += `**Date:** ${new Date(report.observedAt).toLocaleDateString()}\n`;
+  markdown += `**Type:** ${report.type}\n`;
+  markdown += `**Zone:** ${report.zone}\n\n`;
+
+  markdown += `## Description\n${report.description}\n\n`;
+
+  if (report.invovlementSummary) {
+    markdown += "## Involvement Summary\n";
+    if (report.invovlementSummary.caught)
+      markdown += `- Caught: ${report.invovlementSummary.caught}\n`;
+    if (report.invovlementSummary.buried)
+      markdown += `- Buried: ${report.invovlementSummary.buried}\n`;
+    if (report.invovlementSummary.injured)
+      markdown += `- Injured: ${report.invovlementSummary.injured}\n`;
+    if (report.invovlementSummary.killed)
+      markdown += `- Killed: ${report.invovlementSummary.killed}\n`;
+    markdown += "\n";
+  }
+
+  if (report.reportDetail) {
+    const detail = report.reportDetail;
+
+    if (detail.activity) markdown += `**Activity:** ${detail.activity}\n`;
+    if (detail.dangerRating)
+      markdown += `**Danger Rating:** ${detail.dangerRating}\n\n`;
+
+    if (detail.weatherSummary)
+      markdown += `## Weather Summary\n${detail.weatherSummary}\n\n`;
+    if (detail.snowpackSummary)
+      markdown += `## Snowpack Summary\n${detail.snowpackSummary}\n\n`;
+    if (detail.accidentSummary)
+      markdown += `## Accident Summary\n${detail.accidentSummary}\n\n`;
+    if (detail.rescueSummary)
+      markdown += `## Rescue Summary\n${detail.rescueSummary}\n\n`;
+    if (detail.involvementSummary)
+      markdown += `## Involvement Details\n${detail.involvementSummary}\n\n`;
+    if (detail.leadUpEvents)
+      markdown += `## Lead-up Events\n${detail.leadUpEvents}\n\n`;
+    if (detail.avalancheForecast)
+      markdown += `## Avalanche Forecast\n${detail.avalancheForecast}\n\n`;
+    if (detail.comments)
+      markdown += `## Additional Comments\n${detail.comments}\n\n`;
+  }
+
+  markdown += `*Report ID: ${report.id} - Last updated: ${new Date(report.updatedAt).toLocaleString()}*`;
+
+  return markdown;
+}
+
+// Create instance of the AvalancheApiClient
+const avalancheApiClient = new AvalancheApiClient();
+
 export const recentAvalancheAccidentsTool = tool({
   description:
     "Get recent avalanche accidents, incidents, and historical reports from Colorado. USE THIS TOOL WHEN ASKED ABOUT PAST INCIDENTS, ACCIDENTS, OR RECENT AVALANCHE HISTORY.",
   parameters: z.object({}),
   execute: async () => {
     console.log("retrieving recent avalanche incidents");
-    const params = {
-      page: 1,
-      per: 5,
-      observed_at_gteq: startOfAvalancheYear(),
-      observed_at_lteq: new Date(),
-      status_eq: "approved",
-      type_in: ["incident_report", "accident_report"],
-      state_eq: "CO",
-      sorts: ["observed_at desc", "created_at desc"],
-    };
-
-    const reports = await avalancheApiClient.getReports(params);
-    const mapped = reports.map(mapReportData);
-    console.log("mapped response", mapped);
-    return mapped;
+    const report = await fetchReport(avalancheApiClient);
+    return report;
   },
 });
+
+export async function fetchReport(client: AvalancheApiClient) {
+  const params = {
+    page: 1,
+    per: 250,
+    observed_at_gteq: startOfAvalancheYear(),
+    observed_at_lteq: new Date(),
+    status_eq: "approved",
+    type_in: ["incident_report", "accident_report"],
+    state_eq: "CO",
+    sorts: ["observed_at desc", "created_at desc"],
+  };
+  const reports = await client.getReports(params);
+  const mapped = reports
+    //.slice(0, 5)
+    .map((raw) => mapReportData(raw))
+    .map((formatted) => formatReportToMarkdown(formatted))
+    .join("\n");
+  //console.log("mapped response", mapped);
+  return mapped;
+}
