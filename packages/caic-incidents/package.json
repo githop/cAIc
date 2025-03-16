@@ -1,5 +1,5 @@
 {
-  "name": "@ollama-ts/clients/weather-gov-client",
+  "name": "@ollama-ts/caic-incidents",
   "type": "module",
   "main": "index.ts",
   "types": "index.ts"

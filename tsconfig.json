@@ -26,9 +26,9 @@
     /* Paths for workspace aliases */
     "baseUrl": ".",
     "paths": {
-      "@ollama-ts/clients/caic": ["packages/clients/caic"],
-      "@ollama-ts/clients/weather-gov-client": ["packages/clients/weather-gov-client"],
-      "@ollama-ts/clients/caic-incidents": ["packages/clients/caic-incidents"]
+      "@ollama-ts/caic": ["packages/caic"],
+      "@ollama-ts/weather-gov-client": ["packages/weather-gov-client"],
+      "@ollama-ts/caic-incidents": ["packages/caic-incidents"]
     }
   },
   "include": ["apps/**/*.ts", "packages/**/*.ts"]

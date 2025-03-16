@@ -1,6 +1,6 @@
 import { tool } from 'ai';
 import { z } from 'zod';
-import { CaicClient, fetchAvalancheSummary } from '@ollama-ts/clients';
+import { CaicClient, fetchAvalancheSummary } from '@ollama-ts/caic';
 
 const caicClient = new CaicClient();
 

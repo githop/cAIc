@@ -1,5 +1,5 @@
 {
-  "name": "@ollama-ts/clients/caic",
+  "name": "@ollama-ts/caic",
   "type": "module",
   "main": "index.ts",
   "types": "index.ts"

@@ -1,7 +1,10 @@
 import { tool } from "ai";
 import { z } from "zod";
-import { AvalancheApiClient, startOfAvalancheYear } from "@ollama-ts/clients";
-import type { IncidentReport } from "@ollama-ts/clients";
+import {
+  AvalancheApiClient,
+  startOfAvalancheYear,
+} from "@ollama-ts/caic-incidents";
+import type { IncidentReport } from "@ollama-ts/caic-incidents";
 
 // Create instance of the AvalancheApiClient
 const avalancheApiClient = new AvalancheApiClient();
