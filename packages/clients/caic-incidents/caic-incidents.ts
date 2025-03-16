@@ -254,7 +254,7 @@ interface InvolvementSummary {
 }
 
 // Main Report Types
-interface IncidentReport extends BaseEntity {
+export interface IncidentReport extends BaseEntity {
   backcountry_zone_id: string;
   backcountry_zone: BackcountryZone;
   highway_zone_id: string | null;
