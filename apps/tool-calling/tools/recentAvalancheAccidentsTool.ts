@@ -1,6 +1,6 @@
-import { tool } from 'ai';
-import { z } from 'zod';
-import { AvalancheApiClient, startOfAvalancheYear } from '@ollama-ts/clients';
+import { tool } from "ai";
+import { z } from "zod";
+import { AvalancheApiClient, startOfAvalancheYear } from "@ollama-ts/clients";
 
 // Create instance of the AvalancheApiClient
 const avalancheApiClient = new AvalancheApiClient();
@@ -19,15 +19,16 @@ export const recentAvalancheAccidentsTool = tool({
       status_eq: "approved",
       type_in: ["incident_report", "accident_report"],
       state_eq: "CO",
-      sorts: ["observed_at desc"],
+      sorts: ["observed_at desc", "created_at desc"],
     };
 
     const reports = await avalancheApiClient.getReports(params);
-    console.log(reports);
     return reports.map((report) => ({
       id: report.id,
       type: report.type,
       observedAt: report.observed_at,
+      createdAt: report.created_at,
+      updatedAt: report.updated_at,
       location: `${report.area}, ${report.state}`,
       description: report.description || "No description available",
       zone: report.backcountry_zone?.title || "Unknown zone",
@@ -40,6 +41,10 @@ export const recentAvalancheAccidentsTool = tool({
             involvementSummary: report.public_report_detail.involvement_summary,
             activity: report.public_report_detail.activity,
             dangerRating: report.public_report_detail.danger_rating,
+            leadUpEvents: report.public_report_detail.lead_up_events,
+            avalancheForecast:
+              report.public_report_detail.backcountry_avalanche_forecast,
+            comments: report.public_report_detail.comments,
           }
         : null,
       invovlementSummary: report.involvement_summary
