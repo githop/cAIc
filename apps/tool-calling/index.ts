@@ -1,4 +1,5 @@
 import { createOpenAICompatible } from "@ai-sdk/openai-compatible";
+import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { streamText, tool } from "ai";
 import { z } from "zod";
 import { createInterface } from "node:readline/promises";
@@ -6,7 +7,9 @@ import { CaicClient, fetchAvalancheSummary } from "@ollama-ts/clients";
 import { WeatherGovClient } from "@ollama-ts/clients";
 import { AvalancheApiClient, startOfAvalancheYear } from "@ollama-ts/clients";
 
-const MODEL = "llama3.2:3b-instruct-fp16" as const;
+const OLLAMA_MODEL = "llama3.2:3b-instruct-fp16" as const;
+const GEMINI_MODEL = "gemini-2.0-flash-001" as const;
+const API_KEY_GEMINI = process.env.API_KEY_GEMINI;
 
 async function getForecast(
   latitude: number,
@@ -66,7 +69,7 @@ const getRecentIncidentsTool = tool({
     console.log("retrieving recent avalanche incidents");
     const params = {
       page: 1,
-      per: 5,
+      per: 250,
       observed_at_gteq: startOfAvalancheYear(),
       observed_at_lteq: new Date(),
       status_eq: "approved",
@@ -76,7 +79,7 @@ const getRecentIncidentsTool = tool({
     };
 
     const reports = await avalancheApiClient.getReports(params);
-    return reports.map((report: any) => ({
+    return reports.map((report) => ({
       id: report.id,
       type: report.type,
       observedAt: report.observed_at,
@@ -94,6 +97,14 @@ const getRecentIncidentsTool = tool({
             dangerRating: report.public_report_detail.danger_rating,
           }
         : null,
+      invovlementSummary: report.involvement_summary
+        ? {
+            buried: report.involvement_summary.buried,
+            injured: report.involvement_summary.injured,
+            killed: report.involvement_summary.killed,
+            caught: report.involvement_summary.caught,
+          }
+        : null,
     }));
   },
 });
@@ -103,15 +114,28 @@ const rl = createInterface({
   output: process.stdout,
 });
 
-const provider = createOpenAICompatible<typeof MODEL, any, any>({
+// Configure Ollama provider (local LLM)
+const ollamaProvider = createOpenAICompatible<typeof OLLAMA_MODEL, any, any>({
   name: "gnarlybox-ai",
   baseURL: "http://localhost:11434/v1",
 });
 
+// Configure Gemini provider
+const geminiProvider = createGoogleGenerativeAI({
+  apiKey: API_KEY_GEMINI,
+});
+
+const provider = true
+  ? ollamaProvider(OLLAMA_MODEL)
+  : geminiProvider(GEMINI_MODEL);
+
 try {
   while (true) {
     const prompt = await rl.question(
-      "> Ask for: (1) weather forecast (2) avalanche danger forecast or (3) recent avalanche incidents/accidents\n> ",
+      `> Ask for: 
+      (1) weather forecast
+      (2) avalanche danger forecast
+      (3) recent avalanche incidents/accidents\n>`,
     );
 
     if (prompt === "exit") {
@@ -120,8 +144,9 @@ try {
       break;
     }
 
+    // Use type assertion to allow the Gemini provider to work with streamText
     const { textStream } = streamText({
-      model: provider("llama3.2:3b-instruct-fp16"),
+      model: provider as any,
       prompt,
       maxSteps: 10,
       tools: {

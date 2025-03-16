@@ -246,6 +246,7 @@ interface InvolvementSummary {
   involved: number;
   caught?: number;
   buried?: number;
+  killed?: number;
   injured?: number;
   normalized_travel_activity: {
     [key: string]: number;
@@ -364,11 +365,7 @@ export class AvalancheApiError extends Error {
   readonly statusCode?: number;
   readonly response?: Response;
 
-  constructor(
-    message: string,
-    statusCode?: number,
-    response?: Response,
-  ) {
+  constructor(message: string, statusCode?: number, response?: Response) {
     super(message);
     this.name = "AvalancheApiError";
     this.statusCode = statusCode;

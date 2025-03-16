@@ -5,6 +5,7 @@
     "packages/*"
   ],
   "dependencies": {
+    "@ai-sdk/google": "^1.1.25",
     "@ai-sdk/openai-compatible": "^0.1.0",
     "ai": "^4.1.0",
     "ollama": "^0.5.12",
