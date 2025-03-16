@@ -7,7 +7,7 @@ import {
 import type { IncidentReport } from "@ollama-ts/caic-incidents";
 
 // Create instance of the AvalancheApiClient
-const avalancheApiClient = new AvalancheApiClient();
+const avalancheApiClient = new AvalancheApiClient({ useMock: true });
 
 /**
  * Maps API report to formatted report data
@@ -67,6 +67,7 @@ export const recentAvalancheAccidentsTool = tool({
 
     const reports = await avalancheApiClient.getReports(params);
     const mapped = reports.map(mapReportData);
+    console.log("mapped response", mapped);
     return mapped;
   },
 });

@@ -1,3 +1,6 @@
+import { readFile } from "node:fs/promises";
+import { resolve } from "node:path";
+
 // Base Types
 interface BaseEntity {
   id: string;
@@ -335,6 +338,15 @@ export interface ReportParams {
 // Root type for the array in the JSON
 type IncidentReportCollection = IncidentReport[];
 
+async function readMockJson() {
+  const file = await readFile(
+    resolve(import.meta.dirname, "./response.json"),
+    "utf-8",
+  );
+
+  return JSON.parse(file) as IncidentReportCollection;
+}
+
 export function startOfAvalancheYear(input?: Date): Date {
   // Get current date in Denver time zone if no input is provided
   const today = input || new Date();
@@ -385,6 +397,7 @@ export interface AvalancheApiClientOptions {
   defaultRequestOptions?: RequestInit;
   /** Request timeout in milliseconds */
   timeout?: number;
+  useMock?: boolean;
 }
 
 /**
@@ -394,6 +407,7 @@ export class AvalancheApiClient {
   private readonly baseUrl: string;
   private readonly defaultRequestOptions: RequestInit;
   private readonly timeout: number;
+  private readonly useMock?: boolean;
 
   /**
    * Creates a new Avalanche API client
@@ -405,6 +419,7 @@ export class AvalancheApiClient {
       "https://avalanche.state.co.us/api-proxy/caic_data_api";
     this.defaultRequestOptions = options.defaultRequestOptions ?? {};
     this.timeout = options.timeout ?? 30000; // Default timeout: 30 seconds
+    this.useMock = options.useMock ?? false;
   }
 
   /**
@@ -463,6 +478,10 @@ export class AvalancheApiClient {
     params: ReportParams,
     options: RequestInit = {},
   ): Promise<IncidentReportCollection> {
+    if (this.useMock) {
+      return await readMockJson();
+    }
+
     // Build query string
     const queryString = this.buildQueryParams(params);
 
