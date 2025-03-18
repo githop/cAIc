@@ -26,10 +26,22 @@
     /* Paths for workspace aliases */
     "baseUrl": ".",
     "paths": {
-      "@ollama-ts/caic": ["packages/caic"],
-      "@ollama-ts/weather-gov-client": ["packages/weather-gov-client"],
-      "@ollama-ts/caic-incidents": ["packages/caic-incidents"]
+      "@ollama-ts/caic": [
+        "packages/caic"
+      ],
+      "@ollama-ts/weather-gov-client": [
+        "packages/weather-gov-client"
+      ],
+      "@ollama-ts/caic-incidents": [
+        "packages/caic-incidents"
+      ],
+      "@ollama-ts/caic-report-screenshot": [
+        "packages/caic-report-screenshot"
+      ]
     }
   },
-  "include": ["apps/**/*.ts", "packages/**/*.ts"]
+  "include": [
+    "apps/**/*.ts",
+    "packages/**/*.ts"
+  ]
 }
