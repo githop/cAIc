@@ -1,9 +1,17 @@
-import { drizzle } from "drizzle-orm/libsql";
-import { createClient } from "@libsql/client";
-import { loadEnvFile } from "node:process";
+import { findMissingReportIds } from "./db/repo.ts";
+import { fetchReportUrls } from "./fetch-report-urls.ts";
 
-loadEnvFile();
+async function check() {
+  const urls = await fetchReportUrls();
 
-const client = createClient({ url: process.env.DB_FILE_NAME! });
-export const db = drizzle({ client });
-console.log("db??", db);
+  const ids = await findMissingReportIds(
+    urls.map((u) => getReportIdFromUrl(u)),
+  );
+  console.log("missing", ids);
+}
+
+function getReportIdFromUrl(url: string) {
+  return url.split("/").pop()!;
+}
+
+check().catch((e) => console.log(e));
