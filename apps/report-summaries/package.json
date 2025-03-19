@@ -18,6 +18,7 @@
     "ai": "*",
     "drizzle-orm": "^0.40.1",
     "drizzle-zod": "^0.7.0",
+    "nanoid": "^5.1.5",
     "zod": "*"
   },
   "devDependencies": {

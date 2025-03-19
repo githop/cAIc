@@ -1,3 +1,5 @@
+import { writeFile, readFile } from "node:fs/promises";
+import { resolve } from "node:path";
 import { chromium } from "playwright";
 
 export async function takeScreenshot(url: string): Promise<Buffer> {
@@ -13,4 +15,16 @@ export async function takeScreenshot(url: string): Promise<Buffer> {
     await browser.close();
     throw error;
   }
+}
+
+export async function saveScreenshot(
+  reportId: string,
+  buffer: Buffer<ArrayBufferLike>,
+) {
+  await writeFile(resolve(`screenshots/${reportId}.png`), buffer);
+}
+
+export async function openScreenshot(reportId: string) {
+  const file = await readFile(resolve(`screenshots/${reportId}.png`));
+  return file;
 }

@@ -9,13 +9,12 @@ import type { ReportParams } from "@ollama-ts/caic-incidents";
  * @param limit Optional limit for the number of reports to return (default: 50)
  * @returns Array of external canonical report URLs
  */
-export async function fetchReportUrls(): Promise<string[]> {
+export async function fetchReportUrls(): Promise<Map<string, string>> {
   // Create API client
   const client = new AvalancheApiClient({
-    useMock: true, // Use mock data in dev environment
+    useMock: true,
   });
 
-  // Define query parameters
   const params: ReportParams = {
     page: 1,
     per: 250,
@@ -29,15 +28,22 @@ export async function fetchReportUrls(): Promise<string[]> {
   };
 
   try {
-    // Fetch reports
     const reports = await client.getReports(params);
 
-    // Map to external canonical report URLs
-    return reports.map(
-      (report) => report.related_report_links.external_canonical_report,
+    return new Map(
+      reports.map((report) => [
+        getReportIdFromUrl(
+          report.related_report_links.external_canonical_report,
+        ),
+        report.related_report_links.external_canonical_report,
+      ]),
     );
   } catch (error) {
     console.error("Error fetching reports:", error);
-    return [];
+    return new Map();
   }
+}
+
+function getReportIdFromUrl(url: string) {
+  return url.split("/").pop()!;
 }
