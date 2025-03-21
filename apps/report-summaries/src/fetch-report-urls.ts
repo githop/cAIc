@@ -11,9 +11,7 @@ import type { ReportParams } from "@ollama-ts/caic-incidents";
  */
 export async function fetchReportUrls(): Promise<Map<string, string>> {
   // Create API client
-  const client = new AvalancheApiClient({
-    useMock: true,
-  });
+  const client = new AvalancheApiClient();
 
   const params: ReportParams = {
     page: 1,

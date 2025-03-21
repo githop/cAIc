@@ -7,7 +7,9 @@
   "type": "module",
   "main": "index.ts",
   "scripts": {
-    "start": "node --experimental-strip-types --no-warnings=ExperimentalWarning src/index.ts"
+    "start": "node --experimental-strip-types --no-warnings=ExperimentalWarning src/index.ts",
+    "insert-prompt": "node --experimental-strip-types --no-warnings=ExperimentalWarning src/insert-prompt.ts",
+    "regenerate-summaries": "node --experimental-strip-types --no-warnings=ExperimentalWarning src/regenerate-summaries.ts"
   },
   "imports": {
     "@ollama-ts/caic-report-screenshot": "../../packages/caic-report-screenshot"
