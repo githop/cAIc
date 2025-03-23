@@ -3,7 +3,7 @@
 ## Commands
 
 - Run App: `npm run start --workspace tool-calling`
-- Type Check: `tsc --noEmit`
+- Type Check: `npm run typecheck`
 
 ## Code Style
 

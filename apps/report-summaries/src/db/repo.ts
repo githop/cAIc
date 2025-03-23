@@ -130,3 +130,42 @@ export async function getAllReports() {
     throw error;
   }
 }
+
+/**
+ * Get a specific report by reportId
+ */
+export async function getReportById(reportId: string) {
+  try {
+    const result = await db
+      .select()
+      .from(reports)
+      .where(eq(reports.reportId, reportId));
+    return result[0] || null;
+  } catch (error) {
+    console.error(`Failed to get report with ID ${reportId}:`, error);
+    throw error;
+  }
+}
+
+/**
+ * Insert a new report content
+ */
+export async function insertReportContent(content: InsertReportContent) {
+  try {
+    // Validate content data
+    const validContent = insertReportContentSchema.parse(content);
+
+    const [result] = await db
+      .insert(reportContents)
+      .values(validContent)
+      .returning({
+        id: reportContents.id,
+        markdownContent: reportContents.markdownContent,
+      });
+
+    return result;
+  } catch (error) {
+    console.error("Failed to insert report content:", error);
+    throw error;
+  }
+}

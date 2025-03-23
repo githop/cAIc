@@ -4,11 +4,15 @@
     "apps/*",
     "packages/*"
   ],
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
   "dependencies": {
     "@ai-sdk/google": "^1.1.25",
     "@ai-sdk/openai-compatible": "^0.1.0",
     "ai": "^4.1.0",
     "ollama": "^0.5.12",
+    "typescript": "^5.8.2",
     "zod": "^3.24.1"
   },
   "devDependencies": {
