@@ -18,7 +18,7 @@ export async function fetchReportUrls(): Promise<Map<string, string>> {
     per: 250,
     observed_at_gteq: startOfAvalancheYear(),
     observed_at_lteq: new Date(),
-    is_locked_eq: true,
+    is_locked_eq: false,
     status_eq: "approved",
     type_in: ["incident_report", "accident_report"],
     state_eq: "CO",
