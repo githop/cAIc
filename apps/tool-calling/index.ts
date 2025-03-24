@@ -1,36 +1,37 @@
-import { createOpenAICompatible } from "@ai-sdk/openai-compatible";
-import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { streamText } from "ai";
 import { createInterface } from "node:readline/promises";
+import { getModel, OLLAMA_MODELS, GOOGLE_MODELS } from "@ollama-ts/ai-sdk-provider";
 import {
   weatherForecastTool,
   avalancheDangerForecastTool,
   recentAvalancheAccidentsTool,
 } from "./tools/index.ts";
 
-const OLLAMA_MODEL = "llama3.2:3b-instruct-fp16-num_ctx-32k" as const;
-const GEMINI_MODEL = "gemini-2.0-flash-001" as const;
+// Model configuration
 const API_KEY_GEMINI = process.env.API_KEY_GEMINI;
+const USE_OLLAMA = true; // Toggle between Ollama and Gemini
+
+// Provider configuration
+const providerConfig = USE_OLLAMA
+  ? {
+      type: "ollama" as const,
+      name: "gnarlybox-ai",
+      baseURL: "http://localhost:11434/v1",
+    }
+  : {
+      type: "gemini" as const,
+      apiKey: API_KEY_GEMINI || "",
+    };
+
+const modelName = USE_OLLAMA ? OLLAMA_MODELS.LLAMA : GOOGLE_MODELS.GEMINI_FLASH;
 
 const rl = createInterface({
   input: process.stdin,
   output: process.stdout,
 });
 
-// Configure Ollama provider (local LLM)
-const ollamaProvider = createOpenAICompatible<typeof OLLAMA_MODEL, any, any>({
-  name: "gnarlybox-ai",
-  baseURL: "http://localhost:11434/v1",
-});
-
-// Configure Gemini provider
-const geminiProvider = createGoogleGenerativeAI({
-  apiKey: API_KEY_GEMINI,
-});
-
-const provider = true
-  ? ollamaProvider(OLLAMA_MODEL)
-  : geminiProvider(GEMINI_MODEL);
+// Get the appropriate model using our provider package
+const model = getModel(providerConfig, modelName);
 
 try {
   while (true) {
@@ -47,9 +48,9 @@ try {
       break;
     }
 
-    // Use type assertion to allow the Gemini provider to work with streamText
+    // No type assertion needed anymore!
     const { textStream } = streamText({
-      model: provider as any,
+      model,
       prompt,
       maxSteps: 10,
       tools: {

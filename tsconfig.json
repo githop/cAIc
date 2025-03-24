@@ -37,6 +37,9 @@
       ],
       "@ollama-ts/caic-report-screenshot": [
         "packages/caic-report-screenshot"
+      ],
+      "@ollama-ts/ai-sdk-provider": [
+        "packages/ai-sdk-provider"
       ]
     }
   },

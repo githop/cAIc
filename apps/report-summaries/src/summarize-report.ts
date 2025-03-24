@@ -1,20 +1,18 @@
-import { createOpenAICompatible } from "@ai-sdk/openai-compatible";
 import { generateText } from "ai";
+import { getModel } from "@ollama-ts/ai-sdk-provider";
+import type { OllamaModelName } from "@ollama-ts/ai-sdk-provider";
 
-const OLLAMA_MODEL = "gemma3:4b-it-fp16-num_ctx-32k" as const;
-const ollamaProvider = createOpenAICompatible<typeof OLLAMA_MODEL, any, any>({
+const ollamaConfig = {
+  type: "ollama" as const,
   name: "gnarlybox-ai",
   baseURL: "http://localhost:11434/v1",
-});
+};
 
-export function buildSummarizer(
-  model: typeof OLLAMA_MODEL,
-  systemPrompt: string,
-) {
+export function buildSummarizer(model: OllamaModelName, systemPrompt: string) {
   async function summarizeReport(screenshot: Buffer<ArrayBufferLike>) {
     try {
       const { text } = await generateText({
-        model: ollamaProvider(model),
+        model: getModel(ollamaConfig, model),
         messages: [
           {
             role: "system",

@@ -8,7 +8,8 @@
   "imports": {
     "@ollama-ts/caic": "../../packages/caic",
     "@ollama-ts/weather-gov-client": "../../packages/weather-gov-client",
-    "@ollama-ts/caic-incidents": "../../packages/caic-incidents"
+    "@ollama-ts/caic-incidents": "../../packages/caic-incidents",
+    "@ollama-ts/ai-sdk-provider": "../../packages/ai-sdk-provider"
   },
   "dependencies": {
     "@ai-sdk/openai-compatible": "*",
