@@ -1,20 +1,17 @@
-import {
-  findMissingReportIds,
-  getPromptById,
-  insertReport,
-} from "./db/repo.ts";
+import { findMissingReportIds, insertReport } from "./db/repo.ts";
 import {
   takeScreenshot,
   saveScreenshot,
 } from "@ollama-ts/caic-report-screenshot";
 import { fetchReportUrls } from "./fetch-report-urls.ts";
-import { buildSummarizer } from "./summarize-report.ts";
+import { setupSummarizer } from "./report-utils.ts";
+import { loadEnvFile } from "node:process";
+
+loadEnvFile();
 
 async function checkAndSaveNewReports() {
-  const prompt = await getPromptById("prmpt_gkeZ75BKG2iXoYnr");
-  const summarizeReport = buildSummarizer(
-    "gemma3:4b-it-fp16-num_ctx-32k",
-    prompt.text,
+  const { promptData: prompt, summarizeReport } = await setupSummarizer(
+    process.env.DEFAULT_PROMPT_ID!,
   );
   console.log("fetching reports");
   const urls = await fetchReportUrls();

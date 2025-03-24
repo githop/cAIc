@@ -1,6 +1,8 @@
-import { getPromptById, insertReport, insertReportContent } from "./db/repo.ts";
+import { getPromptById, insertReportContent } from "./db/repo.ts";
 import { openScreenshot } from "@ollama-ts/caic-report-screenshot";
-import { buildSummarizer } from "./summarize-report.ts";
+import { generateText } from "ai";
+import { getModel } from "@ollama-ts/ai-sdk-provider";
+import type { VisionModels } from "./db/schema.ts";
 
 export type SummarizeFunction = (screenshot: Buffer) => Promise<string>;
 
@@ -37,25 +39,53 @@ export async function processReport(
   }
 }
 
+function buildSummarizer(model: VisionModels, systemPrompt: string) {
+  async function summarizeReport(screenshot: Buffer<ArrayBufferLike>) {
+    try {
+      const { text } = await generateText({
+        model: getModel(model),
+        messages: [
+          {
+            role: "system",
+            content: systemPrompt,
+          },
+          {
+            role: "user",
+            content: [
+              {
+                type: "image",
+                image: screenshot,
+              },
+            ],
+          },
+        ],
+      });
+
+      return text;
+    } catch (error) {
+      console.error("Error taking screenshot:", error);
+      throw error;
+    }
+  }
+
+  return summarizeReport;
+}
+
 /**
  * Setup a summarizer with the given prompt ID
  */
 export async function setupSummarizer(promptId: string) {
   console.log(`Using prompt ID: ${promptId}`);
-
   // Get the prompt details
   const prompt = await getPromptById(promptId);
-  console.log(`Using prompt: "${prompt.text.substring(0, 50)}..."`);
+  console.log("model: ", prompt.model);
+  console.log(`prompt: "${prompt.text.substring(0, 50)}..."`);
 
   // Build the summarizer with the specified model and prompt
-  const summarizeReport = buildSummarizer(
-    "gemma3:4b-it-fp16-num_ctx-32k",
-    prompt.text,
-  );
+  const summarizeReport = buildSummarizer(prompt.model, prompt.text);
 
   return {
     promptData: prompt,
     summarizeReport,
   };
 }
-

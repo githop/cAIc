@@ -10,7 +10,7 @@ async function regenerateSummary() {
   }
 
   // Get the prompt ID from command line arguments or use a default
-  const promptId = process.argv[3] || "prmpt_gkeZ75BKG2iXoYnr";
+  const promptId = process.argv[3] || process.env.DEFAULT_PROMPT_ID!;
 
   // Get the report
   const report = await getReportById(reportId);
@@ -25,11 +25,7 @@ async function regenerateSummary() {
 
   // Process the report
   try {
-    await processReport(
-      report.reportId,
-      promptData.id,
-      summarizeReport,
-    );
+    await processReport(report.reportId, promptData.id, summarizeReport);
   } catch (error) {
     console.error("Failed to process report:", error);
     process.exit(1);
@@ -39,4 +35,3 @@ async function regenerateSummary() {
 }
 
 regenerateSummary().catch((e) => console.error("Fatal error:", e));
-

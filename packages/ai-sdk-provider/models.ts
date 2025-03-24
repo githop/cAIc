@@ -9,7 +9,11 @@ export const GOOGLE_MODELS = {
   GEMINI_FLASH: "gemini-2.0-flash-001",
 } as const;
 
+export const Models = { ...GOOGLE_MODELS, ...OLLAMA_MODELS } as const;
+
 // Types
-export type OllamaModelName = typeof OLLAMA_MODELS[keyof typeof OLLAMA_MODELS];
-export type GoogleModelName = typeof GOOGLE_MODELS[keyof typeof GOOGLE_MODELS];
+export type OllamaModelName =
+  (typeof OLLAMA_MODELS)[keyof typeof OLLAMA_MODELS];
+export type GoogleModelName =
+  (typeof GOOGLE_MODELS)[keyof typeof GOOGLE_MODELS];
 export type ModelName = OllamaModelName | GoogleModelName;

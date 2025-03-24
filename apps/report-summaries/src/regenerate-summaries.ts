@@ -3,8 +3,8 @@ import { processReport, setupSummarizer } from "./report-utils.ts";
 
 async function regenerateSummaries() {
   // Get the prompt ID from command line arguments or use a default
-  const promptId = process.argv[2] || "prmpt_gkeZ75BKG2iXoYnr";
-  
+  const promptId = process.argv[2] || process.env.DEFAULT_PROMPT_ID!;
+
   // Setup the summarizer
   const { promptData, summarizeReport } = await setupSummarizer(promptId);
 
@@ -25,3 +25,4 @@ async function regenerateSummaries() {
 }
 
 regenerateSummaries().catch((e) => console.error("Fatal error:", e));
+

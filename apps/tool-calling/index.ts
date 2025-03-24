@@ -1,29 +1,25 @@
 import { streamText } from "ai";
 import { createInterface } from "node:readline/promises";
-import { getModel, OLLAMA_MODELS, GOOGLE_MODELS } from "@ollama-ts/ai-sdk-provider";
+import {
+  getModel,
+  OLLAMA_MODELS,
+  GOOGLE_MODELS,
+} from "@ollama-ts/ai-sdk-provider";
 import {
   weatherForecastTool,
   avalancheDangerForecastTool,
   recentAvalancheAccidentsTool,
 } from "./tools/index.ts";
 
-// Model configuration
-const API_KEY_GEMINI = process.env.API_KEY_GEMINI;
-const USE_OLLAMA = true; // Toggle between Ollama and Gemini
+const args = process.argv.slice(2);
 
-// Provider configuration
-const providerConfig = USE_OLLAMA
-  ? {
-      type: "ollama" as const,
-      name: "gnarlybox-ai",
-      baseURL: "http://localhost:11434/v1",
-    }
-  : {
-      type: "gemini" as const,
-      apiKey: API_KEY_GEMINI || "",
-    };
+if (args[0] !== "ollama" && args[0] !== "gemini") {
+  throw new Error("use compatible model");
+}
 
+const USE_OLLAMA = args[0] === "ollama"; // Toggle between Ollama and Gemini
 const modelName = USE_OLLAMA ? OLLAMA_MODELS.LLAMA : GOOGLE_MODELS.GEMINI_FLASH;
+console.log("Chat using ", modelName);
 
 const rl = createInterface({
   input: process.stdin,
@@ -31,7 +27,7 @@ const rl = createInterface({
 });
 
 // Get the appropriate model using our provider package
-const model = getModel(providerConfig, modelName);
+const model = getModel(modelName);
 
 try {
   while (true) {

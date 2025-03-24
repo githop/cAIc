@@ -3,8 +3,7 @@ import { customAlphabet } from "nanoid";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
 import { sql } from "drizzle-orm";
-import { OLLAMA_MODELS, GOOGLE_MODELS } from "@ollama-ts/ai-sdk-provider";
-import type { ModelName } from "@ollama-ts/ai-sdk-provider";
+import { Models, type ModelName } from "@ollama-ts/ai-sdk-provider";
 
 export const reports = sqliteTable("reports", {
   id: text("id")
@@ -55,13 +54,8 @@ export const prompts = sqliteTable("prompts", {
 });
 
 // Define model types for the database schema
-export const MODEL_TYPES = [
-  OLLAMA_MODELS.GEMMA,
-  GOOGLE_MODELS.GEMINI_FLASH
-] as const;
-
-export type ModelType = typeof MODEL_TYPES[number];
-
+export const MODEL_TYPES = [Models.GEMMA, Models.GEMINI_FLASH] as const;
+export type VisionModels = Extract<ModelName, (typeof MODEL_TYPES)[number]>;
 
 // Schemas
 export const insertReportSchema = createInsertSchema(reports, {

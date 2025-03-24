@@ -1,26 +1,14 @@
 import { createOpenAICompatible } from "@ai-sdk/openai-compatible";
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { z } from "zod";
-import {
-  OLLAMA_MODELS,
-  GOOGLE_MODELS,
-} from "./models.ts";
-import type {
-  OllamaModelName,
-  GoogleModelName,
-  ModelName,
-} from "./models.ts";
+import { OLLAMA_MODELS, GOOGLE_MODELS, Models } from "./models.ts";
+import type { OllamaModelName, GoogleModelName, ModelName } from "./models.ts";
+import { loadEnvFile } from "node:process";
 
+loadEnvFile();
 // Export model constants and types
-export {
-  OLLAMA_MODELS,
-  GOOGLE_MODELS,
-};
-export type {
-  OllamaModelName,
-  GoogleModelName,
-  ModelName,
-};
+export { OLLAMA_MODELS, GOOGLE_MODELS, Models };
+export type { OllamaModelName, GoogleModelName, ModelName };
 
 // Provider types
 export type OllamaProvider = ReturnType<typeof createOpenAICompatible>;
@@ -48,7 +36,7 @@ export type ProviderConfig =
 /**
  * Creates an AI provider based on configuration
  */
-export function createProvider(config: ProviderConfig) {
+function createProvider(config: ProviderConfig) {
   if (config.type === "ollama") {
     const { name, baseURL } = ollamaConfigSchema.parse(config);
     return createOpenAICompatible({
@@ -68,17 +56,43 @@ export function createProvider(config: ProviderConfig) {
   throw new Error(`Unsupported provider type`);
 }
 
-/**
- * Helper to get a configured model instance
- */
-export function getModel<TModel extends string>(
-  config: ProviderConfig,
-  model: TModel,
-) {
+function buildProvider(config: ProviderConfig) {
   const provider = createProvider(config);
-  return provider(model);
+
+  function model<TModel extends ModelName>(modelName: TModel) {
+    return provider(modelName);
+  }
+
+  return model;
 }
 
-// Export underlying libraries for advanced use cases
-export { createOpenAICompatible, createGoogleGenerativeAI };
+function isOllamaModel(model: any): model is OllamaModelName {
+  return Object.values(OLLAMA_MODELS).includes(model as any);
+}
 
+function isGoogleModel(model: any): model is GoogleModelName {
+  return Object.values(GOOGLE_MODELS).includes(model as any);
+}
+
+export function getModel<TModel extends ModelName>(modelName: TModel) {
+  if (isOllamaModel(modelName)) {
+    const ollamaProvider = buildProvider({
+      type: "ollama",
+      name: "gnarlybox-ai",
+      baseURL: "http://localhost:11434/v1",
+    });
+    return ollamaProvider(modelName);
+  } else if (isGoogleModel(modelName)) {
+    const API_KEY_GEMINI = process.env.API_KEY_GEMINI;
+    const geminiProvider = buildProvider({
+      type: "gemini",
+      apiKey: API_KEY_GEMINI || "",
+    });
+    return geminiProvider(modelName);
+  }
+
+  // This should never be reached due to the type checking above
+  // Adding this for exhaustiveness checking
+  const _exhaustiveCheck: never = modelName;
+  throw new Error(`Unsupported provider type`);
+}

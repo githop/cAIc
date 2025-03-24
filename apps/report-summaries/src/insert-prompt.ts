@@ -1,6 +1,5 @@
 import { insertPrompt } from "./db/repo.ts";
 import { PromptKindsSchema, MODEL_TYPES } from "./db/schema.ts";
-import type { ModelType } from "./db/schema.ts";
 import { z } from "zod";
 
 async function main() {
@@ -10,7 +9,7 @@ async function main() {
 
     if (args.length !== 3) {
       console.error('Usage: node insert-prompt.ts <kind> <model> "<text>"');
-      console.error('Note: The text must be enclosed in quotes');
+      console.error("Note: The text must be enclosed in quotes");
       process.exit(1);
     }
 
@@ -19,13 +18,15 @@ async function main() {
     const text = args[2];
 
     if (!text) {
-      console.error('Error: Text argument is required');
+      console.error("Error: Text argument is required");
       process.exit(1);
     }
 
     // Model validation is now handled by zod
 
-    console.log(`Inserting prompt of kind "${kind}" for model "${model}" with text: "${text}"`);
+    console.log(
+      `Inserting prompt of kind "${kind}" for model "${model}" with text: "${text}"`,
+    );
 
     const result = await insertPrompt({
       text,
