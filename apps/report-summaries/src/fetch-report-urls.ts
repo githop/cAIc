@@ -1,8 +1,8 @@
 import {
   AvalancheApiClient,
   startOfAvalancheYear,
-} from "@ollama-ts/caic-incidents";
-import type { ReportParams } from "@ollama-ts/caic-incidents";
+} from "@caic/caic-incidents";
+import type { ReportParams } from "@caic/caic-incidents";
 
 /**
  * Fetches avalanche incident reports and returns their external canonical report URLs

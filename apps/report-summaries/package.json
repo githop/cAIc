@@ -13,7 +13,7 @@
     "regenerate-summary": "node --experimental-strip-types --no-warnings=ExperimentalWarning src/regenerate-summary.ts"
   },
   "imports": {
-    "@ollama-ts/caic-report-screenshot": "../../packages/caic-report-screenshot"
+    "@caic/caic-report-screenshot": "../../packages/caic-report-screenshot"
   },
   "dependencies": {
     "@ai-sdk/openai-compatible": "*",

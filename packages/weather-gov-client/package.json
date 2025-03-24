@@ -1,5 +1,5 @@
 {
-  "name": "@ollama-ts/weather-gov-client",
+  "name": "@caic/weather-gov-client",
   "type": "module",
   "main": "index.ts",
   "types": "index.ts"

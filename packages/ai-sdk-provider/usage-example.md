@@ -1,4 +1,4 @@
-# Usage Examples for @ollama-ts/ai-sdk-provider
+# Usage Examples for @caic/ai-sdk-provider
 
 ## Before Refactoring
 
@@ -38,7 +38,7 @@ const { textStream } = streamText({
 After implementing the package, the code simplifies to:
 
 ```typescript
-import { getModel } from '@ollama-ts/ai-sdk-provider';
+import { getModel } from '@caic/ai-sdk-provider';
 import { streamText } from 'ai';
 
 // Environment variables or config 
@@ -74,7 +74,7 @@ const { textStream } = streamText({
 ## In Image Processing App
 
 ```typescript
-import { getModel } from '@ollama-ts/ai-sdk-provider';
+import { getModel } from '@caic/ai-sdk-provider';
 import { generateText } from 'ai';
 
 // Get configured model

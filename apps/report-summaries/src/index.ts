@@ -2,7 +2,7 @@ import { findMissingReportIds, insertReport } from "./db/repo.ts";
 import {
   takeScreenshot,
   saveScreenshot,
-} from "@ollama-ts/caic-report-screenshot";
+} from "@caic/caic-report-screenshot";
 import { fetchReportUrls } from "./fetch-report-urls.ts";
 import { setupSummarizer } from "./report-utils.ts";
 import { loadEnvFile } from "node:process";

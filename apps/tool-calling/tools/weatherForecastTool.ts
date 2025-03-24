@@ -1,6 +1,6 @@
 import { tool } from 'ai';
 import { z } from 'zod';
-import { WeatherGovClient } from '@ollama-ts/weather-gov-client';
+import { WeatherGovClient } from '@caic/weather-gov-client';
 
 async function getForecast(
   latitude: number,

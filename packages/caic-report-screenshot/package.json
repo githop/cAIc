@@ -1,5 +1,5 @@
 {
-  "name": "@ollama-ts/caic-report-screenshot",
+  "name": "@caic/caic-report-screenshot",
   "version": "1.0.0",
   "description": "",
   "license": "ISC",

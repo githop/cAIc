@@ -1,5 +1,5 @@
 {
-  "name": "@ollama-ts/ai-sdk-provider",
+  "name": "@caic/ai-sdk-provider",
   "type": "module",
   "main": "index.ts",
   "types": "index.ts"

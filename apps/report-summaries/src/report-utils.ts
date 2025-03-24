@@ -1,7 +1,7 @@
 import { getPromptById, insertReportContent } from "./db/repo.ts";
-import { openScreenshot } from "@ollama-ts/caic-report-screenshot";
+import { openScreenshot } from "@caic/caic-report-screenshot";
 import { generateText } from "ai";
-import { getModel } from "@ollama-ts/ai-sdk-provider";
+import { getModel } from "@caic/ai-sdk-provider";
 import type { VisionModels } from "./db/schema.ts";
 
 export type SummarizeFunction = (screenshot: Buffer) => Promise<string>;

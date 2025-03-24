@@ -3,7 +3,7 @@ import { customAlphabet } from "nanoid";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
 import { sql } from "drizzle-orm";
-import { Models, type ModelName } from "@ollama-ts/ai-sdk-provider";
+import { Models, type ModelName } from "@caic/ai-sdk-provider";
 
 export const reports = sqliteTable("reports", {
   id: text("id")

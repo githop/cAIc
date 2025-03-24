@@ -1,5 +1,5 @@
 {
-  "name": "@ollama-ts/caic",
+  "name": "@caic/caic",
   "type": "module",
   "main": "index.ts",
   "types": "index.ts"

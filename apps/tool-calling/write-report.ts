@@ -1,7 +1,7 @@
 import { resolve } from "node:path";
 import { fetchReport } from "./tools/recentAvalancheAccidentsTool.ts";
 import { writeFile } from "node:fs/promises";
-import { AvalancheApiClient } from "@ollama-ts/caic-incidents";
+import { AvalancheApiClient } from "@caic/caic-incidents";
 
 const avalancheApiClient = new AvalancheApiClient({ useMock: true });
 async function writeReport() {

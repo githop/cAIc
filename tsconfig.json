@@ -26,19 +26,19 @@
     /* Paths for workspace aliases */
     "baseUrl": ".",
     "paths": {
-      "@ollama-ts/caic": [
+      "@caic/caic": [
         "packages/caic"
       ],
-      "@ollama-ts/weather-gov-client": [
+      "@caic/weather-gov-client": [
         "packages/weather-gov-client"
       ],
-      "@ollama-ts/caic-incidents": [
+      "@caic/caic-incidents": [
         "packages/caic-incidents"
       ],
-      "@ollama-ts/caic-report-screenshot": [
+      "@caic/caic-report-screenshot": [
         "packages/caic-report-screenshot"
       ],
-      "@ollama-ts/ai-sdk-provider": [
+      "@caic/ai-sdk-provider": [
         "packages/ai-sdk-provider"
       ]
     }

@@ -1,4 +1,5 @@
 {
+  "name": "cAIc",
   "type": "module",
   "workspaces": [
     "apps/*",

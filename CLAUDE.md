@@ -1,4 +1,4 @@
-# Ollama-TS Guidelines
+# cAIc Guidelines
 
 ## Commands
 
@@ -7,7 +7,7 @@
 
 ## Code Style
 
-- **Imports**: Use named imports; follow path aliases (@ollama-ts/\*)
+- **Imports**: Use named imports; follow path aliases (@caic/\*)
 - **Types**: Strong typing required; avoid `any`; use zod for API validation
 - **Naming**: camelCase for variables/functions, PascalCase for classes/interfaces
 - **Error Handling**: try/catch with specific error types; log errors properly

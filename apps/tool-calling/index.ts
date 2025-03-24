@@ -4,7 +4,7 @@ import {
   getModel,
   OLLAMA_MODELS,
   GOOGLE_MODELS,
-} from "@ollama-ts/ai-sdk-provider";
+} from "@caic/ai-sdk-provider";
 import {
   weatherForecastTool,
   avalancheDangerForecastTool,

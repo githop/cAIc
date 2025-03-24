@@ -3,8 +3,8 @@ import { z } from "zod";
 import {
   AvalancheApiClient,
   startOfAvalancheYear,
-} from "@ollama-ts/caic-incidents";
-import type { IncidentReport } from "@ollama-ts/caic-incidents";
+} from "@caic/caic-incidents";
+import type { IncidentReport } from "@caic/caic-incidents";
 
 /**
  * Type definition for the return value of mapReportData
