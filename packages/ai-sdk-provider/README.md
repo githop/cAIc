@@ -1,66 +1,86 @@
-# @ollama-ts/ai-sdk-provider
+# @caic/ai-sdk-provider
 
 A simple provider factory for AI SDK that supports both local LLM providers (Ollama) and cloud providers (Gemini).
 
-## Installation
-
-```bash
-npm install @ollama-ts/ai-sdk-provider
-```
-
 ## Usage
 
-### Basic usage
+### Basic usage with model constants
 
 ```typescript
-import { createProvider, getModel } from '@ollama-ts/ai-sdk-provider';
-import { streamText } from 'ai';
+import { getModel, Models } from "@caic/ai-sdk-provider";
+import { streamText } from "ai";
 
-// Create Ollama provider
-const ollamaConfig = {
-  type: 'ollama',
-  baseURL: 'http://localhost:11434/v1',
-  name: 'your-app-name'
-};
-
-const ollamaProvider = createProvider(ollamaConfig);
-const model = ollamaProvider('llama3.2:3b-instruct-fp16-num_ctx-32k');
+// Get Ollama model using predefined constants
+const model = getModel(Models.LLAMA);
 
 // Use with streamText
 const { textStream } = await streamText({
   model,
-  prompt: 'Tell me about the weather',
-  tools: {
-    // your tools here
-  }
+  prompt: "Tell me about the weather",
 });
 
-// Or use the convenient helper
-const model = getModel(
-  { type: 'ollama' }, 
-  'llama3.2:3b-instruct-fp16-num_ctx-32k'
-);
+// Process the stream
+for await (const chunk of textStream) {
+  process.stdout.write(chunk);
+}
+```
+
+### Creating custom providers
+
+```typescript
+import { createProvider } from "@caic/ai-sdk-provider";
+import { streamText } from "ai";
+
+// Create Ollama provider with custom configuration
+const ollamaConfig = {
+  type: "ollama",
+  baseURL: "http://localhost:11434/v1",
+  name: "your-app-name",
+};
+
+// Build provider and get model
+const ollamaProvider = createProvider(ollamaConfig);
+const model = ollamaProvider("llama3.2:3b-instruct-fp16-num_ctx-32k");
+
+// Use with streamText
+const { textStream } = await streamText({
+  model,
+  prompt: "Tell me about the weather",
+});
 ```
 
 ### Using with Gemini
 
 ```typescript
-import { getModel } from '@ollama-ts/ai-sdk-provider';
-import { generateText } from 'ai';
+import { getModel, Models } from "@caic/ai-sdk-provider";
+import { generateText } from "ai";
 
-// Create and use Gemini provider
-const model = getModel(
-  { 
-    type: 'gemini',
-    apiKey: process.env.API_KEY_GEMINI
-  },
-  'gemini-2.0-flash-001'
-);
+// Get Gemini model (requires API_KEY_GEMINI environment variable)
+const model = getModel(Models.GEMINI_FLASH);
 
 const { text } = await generateText({
   model,
-  messages: [
-    { role: 'user', content: 'Tell me about the weather' }
-  ]
+  messages: [{ role: "user", content: "Tell me about the weather" }],
 });
+
+console.log(text);
 ```
+
+### Available Models
+
+```typescript
+// Import model constants
+import { OLLAMA_MODELS, GOOGLE_MODELS, Models } from "@caic/ai-sdk-provider";
+
+// Ollama models
+console.log(OLLAMA_MODELS.LLAMA); // "llama3.2:3b-instruct-fp16-num_ctx-32k"
+console.log(OLLAMA_MODELS.GEMMA); // "gemma3:4b-it-fp16-num_ctx-32k"
+
+// Google models
+console.log(GOOGLE_MODELS.GEMINI_FLASH); // "gemini-2.0-flash-001"
+
+// Combined models object
+console.log(Models.LLAMA); // "llama3.2:3b-instruct-fp16-num_ctx-32k"
+console.log(Models.GEMINI_FLASH); // "gemini-2.0-flash-001"
+```
+
