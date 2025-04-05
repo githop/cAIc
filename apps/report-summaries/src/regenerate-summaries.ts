@@ -55,45 +55,33 @@ function parseCliArgs() {
 }
 
 /**
- * Creates a singleton rate limiter for Gemini API calls
+ * Creates a rate limiter for Gemini API calls
  */
-class RateLimiter {
-  private static instance: RateLimiter;
-  private intervalMs: number;
-  private lastCallTime = 0;
-  private callCount = 0;
+const createRateLimiter = (callsPerMinute: number) => {
+  const intervalMs = 60000 / callsPerMinute;
+  let lastCallTime = 0;
+  let callCount = 0;
 
-  private constructor(callsPerMinute: number) {
-    this.intervalMs = 60000 / callsPerMinute;
-  }
-
-  public static getInstance(callsPerMinute: number): RateLimiter {
-    if (!RateLimiter.instance) {
-      RateLimiter.instance = new RateLimiter(callsPerMinute);
-    }
-    return RateLimiter.instance;
-  }
-
-  public async throttle(): Promise<void> {
+  return async function throttle(): Promise<void> {
     const now = Date.now();
-    const timeElapsed = now - this.lastCallTime;
+    const timeElapsed = now - lastCallTime;
 
     // Use the fixed interval based on callsPerMinute
-    if (timeElapsed < this.intervalMs) {
+    if (timeElapsed < intervalMs) {
       // Wait for the remaining time until we can make the next call
-      const delayMs = this.intervalMs - timeElapsed;
+      const delayMs = intervalMs - timeElapsed;
       await new Promise((resolve) => setTimeout(resolve, delayMs));
     }
 
-    this.lastCallTime = Date.now();
+    lastCallTime = Date.now();
 
     // Track call count for monitoring purposes
-    this.callCount++;
+    callCount++;
     setTimeout(() => {
-      this.callCount--;
+      callCount--;
     }, 60000);
-  }
-}
+  };
+};
 
 /**
  * Format time in seconds to a human-readable format
@@ -156,9 +144,7 @@ async function regenerateSummaries() {
   // Create a rate limiter if using Gemini
   const isGeminiModel = isGoogleModel(promptData.model);
   const rateLimiter = isGeminiModel
-    ? RateLimiter.getInstance(requestsPerMinute).throttle.bind(
-        RateLimiter.getInstance(requestsPerMinute),
-      )
+    ? createRateLimiter(requestsPerMinute)
     : undefined;
 
   if (isGeminiModel) {
