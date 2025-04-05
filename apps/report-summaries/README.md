@@ -25,6 +25,7 @@ npm run sync
 npm run insert-prompt -- --text="Your prompt text" --model="gemini-flash" --kind="system"
 
 # Regenerate all summaries (requires promptId argument)
+# Optional flags: --batch-size=<number> --concurrency=<number> --requests-per-minute=<number>
 npm run regenerate-summaries -- --promptId="prmpt_123456789ABCDEF"
 
 # Regenerate a single summary (requires reportId and promptId arguments)
