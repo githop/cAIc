@@ -66,11 +66,11 @@ function buildProvider(config: ProviderConfig) {
   return model;
 }
 
-function isOllamaModel(model: any): model is OllamaModelName {
+export function isOllamaModel(model: any): model is OllamaModelName {
   return Object.values(OLLAMA_MODELS).includes(model as any);
 }
 
-function isGoogleModel(model: any): model is GoogleModelName {
+export function isGoogleModel(model: any): model is GoogleModelName {
   return Object.values(GOOGLE_MODELS).includes(model as any);
 }
 
