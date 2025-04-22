@@ -1,6 +1,6 @@
-import { tool } from 'ai';
-import { z } from 'zod';
-import { WeatherGovClient } from '@caic/weather-gov-client';
+import { z } from "zod";
+import { WeatherGovClient } from "@caic/weather-gov-client";
+import { tool } from "ai";
 
 async function getForecast(
   latitude: number,

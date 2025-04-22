@@ -1,19 +1,36 @@
+/**
+ * GeoJSON Feature representing a geographic forecast area
+ */
 interface Feature {
+  /** Unique identifier for the geographic feature */
   id: string;
+  /** GeoJSON type specification, always "Feature" */
   type: "Feature";
+  /** Bounding box in format [minLongitude, minLatitude, maxLongitude, maxLatitude] */
   bbox: [number, number, number, number];
+  /** Geometry specification for the area */
   geometry: {
+    /** Type of geometry, always MultiPolygon for forecast areas */
     type: "MultiPolygon";
+    /** Nested array structure: [polygons][rings][points][coordinates] */
     coordinates: number[][][][];
   };
+  /** Additional properties of the feature */
   properties: {
+    /** Center point coordinates [longitude, latitude] */
     centroid: number[];
+    /** Area identifier matching areaId in forecasts */
     id: string;
   };
 }
 
+/**
+ * GeoJSON FeatureCollection containing multiple forecast areas
+ */
 interface FeatureCollection {
+  /** Array of individual geographic features */
   features: Feature[];
+  /** GeoJSON type specification, always "FeatureCollection" */
   type: "FeatureCollection";
 }
 
@@ -191,15 +208,28 @@ export class CaicClient {
   }
 }
 
+/**
+ * Geographic coordinate point used for location querying
+ */
 export interface Coordinate {
+  /** Latitude in decimal degrees */
   lat: number;
+  /** Longitude in decimal degrees */
   lng: number;
 }
 
+/**
+ * Rectangular geographic area defined by latitude/longitude boundaries
+ * Used for efficient first-pass filtering of point-in-polygon checks
+ */
 interface BoundingBox {
+  /** Minimum latitude (southern boundary) */
   minLat: number;
+  /** Maximum latitude (northern boundary) */
   maxLat: number;
+  /** Minimum longitude (western boundary) */
   minLng: number;
+  /** Maximum longitude (eastern boundary) */
   maxLng: number;
 }
 
