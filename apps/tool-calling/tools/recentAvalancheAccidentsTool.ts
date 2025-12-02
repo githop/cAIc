@@ -140,7 +140,7 @@ const avalancheApiClient = new AvalancheApiClient();
 export const recentAvalancheAccidentsTool = tool({
   description:
     "Get recent avalanche accidents, incidents, and historical reports from Colorado. USE THIS TOOL WHEN ASKED ABOUT PAST INCIDENTS, ACCIDENTS, OR RECENT AVALANCHE HISTORY.",
-  parameters: z.object({}),
+  inputSchema: z.object({}),
   execute: async () => {
     console.log("retrieving recent avalanche incidents");
     const report = await fetchReport(avalancheApiClient);

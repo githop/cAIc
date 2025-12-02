@@ -1,4 +1,4 @@
-import { streamText } from "ai";
+import { streamText, stepCountIs } from "ai";
 import { createInterface } from "node:readline/promises";
 import {
   getModel,
@@ -48,12 +48,13 @@ try {
     const { textStream } = streamText({
       model,
       prompt,
-      maxSteps: 10,
+      stopWhen: stepCountIs(10),
+
       tools: {
         weatherForecastTool,
         avalancheDangerForecastTool,
         recentAvalancheAccidentsTool,
-      },
+      }
     });
 
     for await (const part of textStream) {

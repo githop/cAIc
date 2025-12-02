@@ -17,7 +17,7 @@ const weatherClient = new WeatherGovClient();
 
 export const weatherForecastTool = tool({
   description: "Get the weather forecast for a given longitude and latitude",
-  parameters: z.object({
+  inputSchema: z.object({
     longitude: z.coerce.number().min(-180).max(180).describe("the longitude"),
     latitude: z.coerce.number().min(-90).max(90).describe("the latitude"),
   }),
