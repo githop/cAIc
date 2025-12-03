@@ -18,7 +18,7 @@ if (args[0] !== "ollama" && args[0] !== "gemini") {
 }
 
 const USE_OLLAMA = args[0] === "ollama"; // Toggle between Ollama and Gemini
-const modelName = USE_OLLAMA ? OLLAMA_MODELS.LLAMA : GOOGLE_MODELS.GEMINI_FLASH;
+const modelName = USE_OLLAMA ? OLLAMA_MODELS.QWEN : GOOGLE_MODELS.GEMINI_FLASH;
 console.log("Chat using ", modelName);
 
 const rl = createInterface({

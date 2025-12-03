@@ -2,8 +2,8 @@
   "name": "tool-calling",
   "type": "module",
   "scripts": {
-    "start": "node --experimental-strip-types --env-file=.env index.ts",
-    "write": "node --experimental-strip-types --env-file=.env write-report.ts"
+    "start": "node --env-file=.env index.ts",
+    "write": "node --env-file=.env write-report.ts"
   },
   "imports": {
     "@caic/caic": "../../packages/caic",

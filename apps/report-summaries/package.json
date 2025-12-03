@@ -7,10 +7,10 @@
   "type": "module",
   "main": "index.ts",
   "scripts": {
-    "sync": "node --experimental-strip-types --no-warnings=ExperimentalWarning src/index.ts",
-    "insert-prompt": "node --experimental-strip-types --no-warnings=ExperimentalWarning src/insert-prompt.ts",
-    "regenerate-summaries": "node --experimental-strip-types --no-warnings=ExperimentalWarning src/regenerate-summaries.ts",
-    "regenerate-summary": "node --experimental-strip-types --no-warnings=ExperimentalWarning src/regenerate-summary.ts"
+    "sync": "node src/index.ts",
+    "insert-prompt": "node src/insert-prompt.ts",
+    "regenerate-summaries": "node src/regenerate-summaries.ts",
+    "regenerate-summary": "node src/regenerate-summary.ts"
   },
   "imports": {
     "@caic/caic-report-screenshot": "../../packages/caic-report-screenshot"

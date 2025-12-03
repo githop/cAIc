@@ -390,7 +390,7 @@ export async function fetchAvalancheSummary(
   for (const result of results) {
     switch (result.type) {
       case "regionaldiscussion":
-        avalancheSummary += "Regional Discussion: \n" + result.message + " \n ";
+        // avalancheSummary += "Regional Discussion: \n" + result.message + " \n ";
         break;
       case "avalancheforecast":
         avalancheSummary +=
