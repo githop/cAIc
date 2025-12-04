@@ -4,6 +4,8 @@ A collection of AI-powered tools for working with Colorado Avalanche Information
 
 ## Project Overview
 
+![cAIc Codebase Diagram](./caic-codebase-diagram.png)
+
 This monorepo contains applications and packages for accessing, analyzing, and visualizing avalanche information using AI and LLM tools. The project leverages the AI SDK to interact with both local and cloud-based language models.
 
 ## Applications
@@ -13,7 +15,7 @@ This monorepo contains applications and packages for accessing, analyzing, and v
 Generates avalanche condition reports using AI with specialized tools that fetch weather forecasts, avalanche danger assessments, and recent accident information.
 
 ```bash
-npm run start --workspace tool-calling
+npm run start --workspace tool-calling -- ollama
 ```
 
 ### Report Summaries App
@@ -58,5 +60,5 @@ npm install
 npm run typecheck
 
 # Run tool calling app
-npm run start --workspace tool-calling
+npm run start --workspace tool-calling -- ollama
 ```

@@ -21,15 +21,15 @@ This application captures avalanche reports, stores them in a SQLite database (v
 # Sync new reports from CAIC
 npm run sync
 
-# Insert a new prompt template (requires prompt text, model, and kind arguments)
-npm run insert-prompt -- --text="Your prompt text" --model="gemini-flash" --kind="system"
+# Insert a new prompt template (requires kind, model, and text arguments)
+npm run insert-prompt -- system gemini-flash "Your prompt text"
 
 # Regenerate all summaries (requires promptId argument)
 # Optional flags: --batch-size=<number> --concurrency=<number> --requests-per-minute=<number>
-npm run regenerate-summaries -- --promptId="prmpt_123456789ABCDEF"
+npm run regenerate-summaries -- prmpt_123456789ABCDEF
 
 # Regenerate a single summary (requires reportId and promptId arguments)
-npm run regenerate-summary -- --reportId="rep_123456789ABCDEF" --promptId="prmpt_123456789ABCDEF"
+npm run regenerate-summary -- rep_123456789ABCDEF prmpt_123456789ABCDEF
 ```
 
 ## Database Schema

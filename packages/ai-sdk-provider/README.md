@@ -25,30 +25,6 @@ for await (const chunk of textStream) {
 }
 ```
 
-### Creating custom providers
-
-```typescript
-import { createProvider } from "@caic/ai-sdk-provider";
-import { streamText } from "ai";
-
-// Create Ollama provider with custom configuration
-const ollamaConfig = {
-  type: "ollama",
-  baseURL: "http://localhost:11434/v1",
-  name: "your-app-name",
-};
-
-// Build provider and get model
-const ollamaProvider = createProvider(ollamaConfig);
-const model = ollamaProvider("llama3.2:3b-instruct-fp16-num_ctx-32k");
-
-// Use with streamText
-const { textStream } = await streamText({
-  model,
-  prompt: "Tell me about the weather",
-});
-```
-
 ### Using with Gemini
 
 ```typescript
@@ -83,4 +59,3 @@ console.log(GOOGLE_MODELS.GEMINI_FLASH); // "gemini-2.0-flash-001"
 console.log(Models.LLAMA); // "llama3.2:3b-instruct-fp16-num_ctx-32k"
 console.log(Models.GEMINI_FLASH); // "gemini-2.0-flash-001"
 ```
-
